@@ -23,7 +23,7 @@ var americanExpress = function(cardNumber) {
 
 var visa = function(cardNumber) {
   var visaPrefix = cardNumber.slice(0, 1);
-  var prefixMatch = visaPrefix === '4';
+  var prefixMatch = (visaPrefix === '4' && cardNumber.slice(0, 4) !== '4903' && cardNumber.slice(0, 4) !== '4905' && cardNumber.slice(0, 4) !== '4911' && cardNumber.slice(0, 4) !== '4936');
   var lengthMatch = (cardNumber.length === 13 || cardNumber.length === 16 || cardNumber.length === 19);
   return prefixMatch && lengthMatch ? true : false;
 };
@@ -66,6 +66,18 @@ var chinaUnionpay = function(cardNumber) {
   return prefixMatch && lengthMatch ? true : false;
 }
 
+var switchNetwork = function(cardNumber) {
+  var switchPrefix = [cardNumber.slice(0, 4), cardNumber.slice(0, 6)];
+  var prefixMatch = false;
+  var lengthMatch = (cardNumber.length === 16 || cardNumber.length === 18 || cardNumber.length === 19);
+  switchPrefix.forEach(function(prefix) {
+    if (prefix === '4903' || prefix === '4905' || prefix === '4911' || prefix === '4936' || prefix === '6333' || prefix === '6759' || prefix === '564182' || prefix === '633110') {
+      prefixMatch = true;
+    }
+  });
+  return prefixMatch && lengthMatch ? true : false;
+}
+
 var detectNetwork = function(cardNumber) {
   // Note: `cardNumber` will always be a string
   // The Diner's Club network always starts with a 38 or 39 and is 14 digits long
@@ -87,6 +99,8 @@ var detectNetwork = function(cardNumber) {
     return 'Maestro';
   } else if (chinaUnionpay(cardNumber)) {
     return 'China UnionPay';
+  } else if (switchNetwork(cardNumber)) {
+    return 'Switch';
   } else {
     return 'Credit card network was not found.';
   }
