@@ -12,28 +12,40 @@ var dinersClub = function(cardNumber) {
   var prefixMatch = (dinersClubPrefix === '38' || dinersClubPrefix === '39');
   var lengthMatch = cardNumber.length === 14;
   return prefixMatch && lengthMatch ? true : false;
-}
+};
 
 var americanExpress = function(cardNumber) {
   var americanExpressPrefix = cardNumber.slice(0, 2);
   var prefixMatch = (americanExpressPrefix === '34' || americanExpressPrefix === '37');
   var lengthMatch = cardNumber.length === 15;
   return prefixMatch && lengthMatch ? true : false;
-}
+};
 
 var visa = function(cardNumber) {
   var visaPrefix = cardNumber.slice(0, 1);
   var prefixMatch = visaPrefix === '4';
   var lengthMatch = (cardNumber.length === 13 || cardNumber.length === 16 || cardNumber.length === 19);
   return prefixMatch && lengthMatch ? true : false;
-}
+};
 
 var mastercard = function(cardNumber) {
   var mastercardPrefix = cardNumber.slice(0, 2);
   var prefixMatch = (51 <= mastercardPrefix && mastercardPrefix <= 55);
   var lengthMatch = cardNumber.length === 16;
   return prefixMatch && lengthMatch ? true : false;
-}
+};
+
+var discover = function(cardNumber) {
+  var discoverPrefix = [cardNumber.slice(0, 2), cardNumber.slice(0, 3), cardNumber.slice(0, 4)];
+  var prefixMatch = false;
+  var lengthMatch = (cardNumber.length === 16 || cardNumber.length === 19);
+  discoverPrefix.forEach(function(prefix) {
+    if (prefix === '65' || (644 <= parseInt(prefix) && parseInt(prefix) <= 649) || prefix === '6011') {
+      prefixMatch = true;
+    }
+  });
+  return prefixMatch && lengthMatch ? true : false;
+};
 
 var detectNetwork = function(cardNumber) {
   // Note: `cardNumber` will always be a string
@@ -50,6 +62,8 @@ var detectNetwork = function(cardNumber) {
     return 'Visa';
   } else if (mastercard(cardNumber)) {
     return 'MasterCard';
+  } else if (discover(cardNumber)) {
+    return 'Discover';
   } else {
     return 'Credit card network was not found.';
   }
