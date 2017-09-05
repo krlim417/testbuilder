@@ -47,6 +47,13 @@ var discover = function(cardNumber) {
   return prefixMatch && lengthMatch ? true : false;
 };
 
+var maestro = function(cardNumber) {
+  var maestroPrefix = cardNumber.slice(0, 4);
+  var prefixMatch = (maestroPrefix === '5018' || maestroPrefix === '5020' || maestroPrefix === '5038' || maestroPrefix === '6304');
+  var lengthMatch = (12 <= cardNumber.length && cardNumber.length <= 19);
+  return prefixMatch && lengthMatch ? true : false;
+};
+
 var detectNetwork = function(cardNumber) {
   // Note: `cardNumber` will always be a string
   // The Diner's Club network always starts with a 38 or 39 and is 14 digits long
@@ -64,6 +71,8 @@ var detectNetwork = function(cardNumber) {
     return 'MasterCard';
   } else if (discover(cardNumber)) {
     return 'Discover';
+  } else if (maestro(cardNumber)) {
+    return 'Maestro';
   } else {
     return 'Credit card network was not found.';
   }
