@@ -14,6 +14,13 @@ var dinersClub = function(cardNumber) {
   return prefixMatch && lengthMatch ? true : false;
 }
 
+var americanExpress = function(cardNumber) {
+  var americanExpressPrefix = cardNumber.slice(0, 2);
+  var prefixMatch = (americanExpressPrefix === '34' || americanExpressPrefix === '37');
+  var lengthMatch = cardNumber.length === 15;
+  return prefixMatch && lengthMatch ? true : false;
+}
+
 var detectNetwork = function(cardNumber) {
   // Note: `cardNumber` will always be a string
   // The Diner's Club network always starts with a 38 or 39 and is 14 digits long
