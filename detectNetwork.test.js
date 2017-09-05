@@ -58,7 +58,7 @@ describe('American Express', function() {
   // It can get annoying to keep typing the if/throw, so here is a
   // helper function to throw an error if the input statement isn't true.
   var assert = function(isTrue) {
-    if (isTrue) {
+    if (!isTrue) {
       throw new Error('Test failed');
     }
 
@@ -78,7 +78,7 @@ describe('Visa', function() {
   // Chai provides an assert that acts the same as our previous assert.
   // Search the documentation to figure out how to access it.
   //   http://chaijs.com/
-  var assert = chai.FILL_ME_IN;
+  var assert = chai.assert;
 
 
   it('has a prefix of 4 and a length of 13', function() {
