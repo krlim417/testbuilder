@@ -54,6 +54,18 @@ var maestro = function(cardNumber) {
   return prefixMatch && lengthMatch ? true : false;
 };
 
+var chinaUnionpay = function(cardNumber) {
+  var chinaUnionpayPrefix = [cardNumber.slice(0, 3), cardNumber.slice(0, 4), cardNumber.slice(0, 6)];
+  var prefixMatch = false;
+  var lengthMatch = (16 <= cardNumber.length && cardNumber.length <= 19);
+  chinaUnionpayPrefix.forEach(function(prefix) {
+    if ((624 <= parseInt(prefix) && parseInt(prefix) <= 626) || (6282 <= parseInt(prefix) && parseInt(prefix) <= 6288) || (622126 <= parseInt(prefix) && parseInt(prefix) <= 622925)) {
+      prefixMatch = true;
+    }
+  });
+  return prefixMatch && lengthMatch ? true : false;
+}
+
 var detectNetwork = function(cardNumber) {
   // Note: `cardNumber` will always be a string
   // The Diner's Club network always starts with a 38 or 39 and is 14 digits long
@@ -73,6 +85,8 @@ var detectNetwork = function(cardNumber) {
     return 'Discover';
   } else if (maestro(cardNumber)) {
     return 'Maestro';
+  } else if (chinaUnionpay(cardNumber)) {
+    return 'China UnionPay';
   } else {
     return 'Credit card network was not found.';
   }
