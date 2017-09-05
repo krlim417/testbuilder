@@ -28,6 +28,13 @@ var visa = function(cardNumber) {
   return prefixMatch && lengthMatch ? true : false;
 }
 
+var mastercard = function(cardNumber) {
+  var mastercardPrefix = cardNumber.slice(0, 2);
+  var prefixMatch = (51 <= mastercardPrefix && mastercardPrefix <= 55);
+  var lengthMatch = cardNumber.length === 16;
+  return prefixMatch && lengthMatch ? true : false;
+}
+
 var detectNetwork = function(cardNumber) {
   // Note: `cardNumber` will always be a string
   // The Diner's Club network always starts with a 38 or 39 and is 14 digits long
@@ -41,6 +48,8 @@ var detectNetwork = function(cardNumber) {
     return 'American Express';
   } else if (visa(cardNumber)) {
     return 'Visa';
+  } else if (mastercard(cardNumber)) {
+    return 'MasterCard';
   } else {
     return 'Credit card network was not found.';
   }
